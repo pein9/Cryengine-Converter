@@ -15,10 +15,10 @@ internal sealed class ChunkNode_823 : ChunkNode
         if (string.IsNullOrEmpty(Name))
             Name = "unknown";
 
-        ObjectNodeID = b.ReadInt32(); // Object reference ID
+        ObjectNodeID = b.ReadInt32();
         ParentNodeID = b.ReadInt32();
         NumChildren = b.ReadInt32();
-        MaterialID = b.ReadInt32();  // Material ID?
+        MaterialID = b.ReadInt32();
         SkipBytes(b, 4);
 
         // Read the 4x4 transform matrix.

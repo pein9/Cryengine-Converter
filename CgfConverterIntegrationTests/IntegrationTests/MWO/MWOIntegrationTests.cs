@@ -4,6 +4,7 @@ using CgfConverter.Renderers.Collada;
 using CgfConverter.Renderers.Collada.Collada;
 using CgfConverter.Renderers.Collada.Collada.Enums;
 using CgfConverter.Renderers.Gltf;
+using CgfConverter.Renderers.USD;
 using CgfConverterIntegrationTests.Extensions;
 using CgfConverterTests.TestUtilities;
 using Extensions;
@@ -623,6 +624,7 @@ public class MWOIntegrationTests
         var bindPoseArray = "0 0 -1 0.023305 1 0 0 0 0 -1 0 0 0 0 0 1 -0.000089 0 -1 -0.000092 1 0.000008 -0.000089 0 0.000008 -1 0 0 0 0 0 1 -0.000091 0 -1 -0.026455 1 0.000008 -0.000091 0 0.000008";
         var bindPoseArrayNegZeros = "-0 -0 -1 0.023305 1 -0 -0 -0 -0 -1 0 -0 0 0 0 1 -0.000089 -0 -1 -0.000092 1 0.000008 -0.000089 -0 0.000008 -1 0 -0 0 0 0 1 -0.000091 -0 -1 -0.026455 1 0.000008";
         Assert.AreEqual(128, controllerBindPose.Float_Array.Count);
+        var bp = controllerBindPose.Float_Array.Value_As_String;
         Assert.IsTrue(controllerBindPose.Float_Array.Value_As_String.StartsWith(bindPoseArray) || controllerBindPose.Float_Array.Value_As_String.StartsWith(bindPoseArrayNegZeros));
         int actualMaterialsCount = colladaData.DaeObject.Library_Materials.Material.Count();
         Assert.AreEqual(2, actualMaterialsCount);
@@ -876,6 +878,48 @@ public class MWOIntegrationTests
 
         // Accessors check
         Assert.AreEqual(10, gltfData.Accessors.Count);
+    }
+
+    [TestMethod]
+    public void HulaGirl_UsdFormat()
+    {
+        var args = new string[]
+        {
+            $@"{objectDir}\Objects\purchasable\cockpit_standing\hulagirl\hulagirl__gold_a.cga",
+            "-objectdir", objectDir
+        };
+        int result = testUtils.argsHandler.ProcessArgs(args);
+        Assert.AreEqual(0, result);
+        CryEngine cryData = new(args[0], testUtils.argsHandler.PackFileSystem);
+        cryData.ProcessCryengineFiles();
+
+        UsdRenderer usdRenderer = new(testUtils.argsHandler, cryData);
+        var usdDoc = usdRenderer.GenerateUsdObject();
+        usdRenderer.WriteUsdToFile(usdDoc);
+        Assert.IsNotNull(usdDoc);
+        usdDoc.Prims[0].Name = "root";
+        usdDoc.Prims[0].Children[0].Name = "hulagirl_a";
+        usdDoc.Prims[0].Children[0].Children[0].Name = "HulaGirl_UpperBody";
+        usdDoc.Prims[0].Children[0].Children[1].Name = "HulaGirl_LowerBody";
+    }
+
+    [TestMethod]
+    public void Adder_Cockpit_UsdFormat()
+    {
+        var args = new string[]
+        {
+            $@"{objectDir}\Objects\mechs\Adder\cockpit_standard\adder_a_cockpit_standard.cga",
+            "-objectdir", objectDir
+        };
+        int result = testUtils.argsHandler.ProcessArgs(args);
+        Assert.AreEqual(0, result);
+        CryEngine cryData = new(args[0], testUtils.argsHandler.PackFileSystem);
+        cryData.ProcessCryengineFiles();
+
+        UsdRenderer usdRenderer = new(testUtils.argsHandler, cryData);
+        var usdDoc = usdRenderer.GenerateUsdObject();
+        usdRenderer.WriteUsdToFile(usdDoc);
+        Assert.IsNotNull(usdDoc);
     }
 
     [TestMethod]

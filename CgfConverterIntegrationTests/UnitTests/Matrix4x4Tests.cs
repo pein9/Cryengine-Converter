@@ -1,14 +1,15 @@
-﻿using CgfConverter.Structs;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Numerics;
 using Extensions;
 using CgfConverterTests.TestUtilities;
 using System.IO;
 using CgfConverterIntegrationTests.Extensions;
+using CgfConverter.Models.Structs;
 
 namespace CgfConverterTests.UnitTests;
 
 [TestClass]
+[TestCategory("unit")]
 public class Matrix4x4Tests
 {
     // Tests
@@ -23,7 +24,6 @@ public class Matrix4x4Tests
     private const float delta = 0.000001f;
 
     [TestMethod]
-    [TestCategory("unit")]
     public void SetRotationAndTranslationFromQuaternion()
     {
         var quat = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
@@ -130,16 +130,18 @@ public class Matrix4x4Tests
 
     private Matrix3x3 GetTestMatrix33()
     {
-        Matrix3x3 matrix = new Matrix3x3();
-        matrix.M11 = 0.11f;
-        matrix.M12 = 0.12f;
-        matrix.M13 = 0.13f;
-        matrix.M21 = 0.21f;
-        matrix.M22 = 0.22f;
-        matrix.M23 = 0.23f;
-        matrix.M31 = 0.31f;
-        matrix.M32 = 0.32f;
-        matrix.M33 = 0.33f;
+        Matrix3x3 matrix = new()
+        {
+            M11 = 0.11f,
+            M12 = 0.12f,
+            M13 = 0.13f,
+            M21 = 0.21f,
+            M22 = 0.22f,
+            M23 = 0.23f,
+            M31 = 0.31f,
+            M32 = 0.32f,
+            M33 = 0.33f
+        };
 
         return matrix;
     }

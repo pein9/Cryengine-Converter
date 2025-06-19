@@ -1,15 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CgfConverter.Structs;
-using System.Numerics;
+﻿using CgfConverter.Models.Structs;
 using CgfConverterIntegrationTests.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Numerics;
 
 namespace CgfConverterTests.UnitTests;
 
 [TestClass]
+[TestCategory("unit")]
 public class Matrix3x4Tests
 {
     [TestMethod]
-    [TestCategory("unit")]
     public void CreateFromQuaternion_IdentityQuaternion()
     {
         Quaternion q = Quaternion.Identity;
